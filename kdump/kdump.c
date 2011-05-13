@@ -8,7 +8,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <endian.h>
-#include <elf.h>
+#include <linux/elf.h>
 
 #if !defined(__BYTE_ORDER) || !defined(__LITTLE_ENDIAN) || !defined(__BIG_ENDIAN)
 #error Endian defines missing

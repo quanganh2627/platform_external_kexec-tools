@@ -1,4 +1,4 @@
-#include <sys/io.h>
+#include <arch/io.h>
 #include <purgatory.h>
 #include "purgatory-x86.h"
 

@@ -29,6 +29,7 @@ char *v_ifdown = "@(#)ifdown.c  1.11  02-Jun-1998  miquels@cistron.nl";
  */
 int ifdown(void)
 {
+#if 0
 	struct ifreq ifr[MAX_IFS];
 	struct ifconf ifc;
 	int i, fd;
@@ -69,6 +70,7 @@ int ifdown(void)
 		}
 	}
 	close(fd);
+#endif
 
 	return 0;
 }
