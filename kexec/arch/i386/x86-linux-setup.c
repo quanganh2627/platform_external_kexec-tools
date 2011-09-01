@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
+#include <libgen.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -53,6 +54,7 @@ void setup_linux_bootloader_parameters(
 {
 	char *cmdline_ptr;
 	unsigned long initrd_base, initrd_addr_max;
+	char *subarch_ptr;
 
 	/* Say I'm a boot loader */
 	real_mode->loader_type = LOADER_TYPE_UNKNOWN;
@@ -77,6 +79,28 @@ void setup_linux_bootloader_parameters(
 	} else {
 		initrd_base = 0;
 		initrd_size = 0;
+	}
+
+	/* Sniff any hw subarch information out of the command line */
+	subarch_ptr = strstr(cmdline, "subarch=");
+	if (subarch_ptr) {
+		char buf[6];
+		unsigned int len;
+		int subarch;
+		char *end_subarch;
+
+		subarch_ptr += 8; /* skip over key name */
+		end_subarch = subarch_ptr + 1;
+		while (*end_subarch && *end_subarch != ' ')
+			end_subarch++;
+		len = end_subarch - subarch_ptr;
+		if (len >= sizeof(buf))
+			len = sizeof(buf) - 1;
+		strncpy(buf, subarch_ptr, len);
+		buf[len] = '\0';
+		subarch = atoi(buf);
+		dbgprintf("Hardware subarch is %d\n", subarch);
+		real_mode->hardware_subarch = subarch;
 	}
 
 	/* Ramdisk address and size */
