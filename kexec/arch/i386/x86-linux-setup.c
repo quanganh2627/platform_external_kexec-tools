@@ -82,7 +82,10 @@ void setup_linux_bootloader_parameters(
 	}
 
 	/* Sniff any hw subarch information out of the command line */
-	subarch_ptr = strstr(cmdline, "subarch=");
+	if (cmdline)
+		subarch_ptr = strstr(cmdline, "subarch=");
+	else
+		subarch_ptr = 0;
 	if (subarch_ptr) {
 		char buf[6];
 		unsigned int len;
